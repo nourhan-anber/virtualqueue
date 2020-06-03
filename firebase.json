@@ -1,0 +1,19 @@
+{
+  "hosting": [
+    {
+      "target": "QueueingSystem",
+      "public": "dist/QueueingSystem",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ]
+    }
+  ]
+}

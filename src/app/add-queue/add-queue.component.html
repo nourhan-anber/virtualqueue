@@ -1,0 +1,14 @@
+<h1>Queue Service</h1>
+<h3>How does i work?</h3>
+<p>Create your own queue</p>
+<form [formGroup]="addQueueForm" (submit)="addqueue()">
+    <p>
+        <mat-form-field appearance="fill">
+            <mat-label>Enter Queue Name</mat-label>
+            <input matInput type="text" placeholder="queueName" formControlName="queueName" name="queueName" required>
+            <mat-error *ngIf="addQueueForm.controls.queueName.invalid">{{getErrorMessage(addQueueForm.controls.queueName)}}</mat-error>
+        </mat-form-field>
+    </p>
+    <div id="alert" class="alert alert-danger"></div>
+    <button mat-raised-button color="primary" type="submit">Add my queue</button>
+</form>

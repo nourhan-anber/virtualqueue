@@ -24,6 +24,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -88,6 +89,7 @@
               "src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/deeppurple-amber.css",
               "src/styles.css"
             ],
             "scripts": []
@@ -117,8 +119,16 @@
               "devServerTarget": "QueueingSystem:serve:production"
             }
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {}
         }
       }
-    }},
-  "defaultProject": "QueueingSystem"
+    }
+  },
+  "defaultProject": "QueueingSystem",
+  "cli": {
+    "analytics": "bb030a17-079b-44b8-8733-0e060890d51e"
+  }
 }
