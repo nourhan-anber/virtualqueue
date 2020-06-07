@@ -1,11 +1,8 @@
-<div *ngIf="isLoading">
-<mat-spinner></mat-spinner>
+<div *ngIf="queueLength > 0">
+  <h3>There're <strong>{{queueLength}}</strong> infront of you </h3>
+  <button mat-flat-button color="primary" (click)="dequeue()">Pull me out</button>
 </div>
-  <div *ngIf="queueLength > 0">
-    <h3>There're <strong>{{queueLength}}</strong> infront of you </h3>
-    <button mat-raised-button color="primary" (click)="dequeue()">Pull me out</button>
-  </div>
-  <div *ngIf="queueLength == 0"><h2>It is your turn now</h2></div>
-  <div *ngIf="queueLength < 0">An error occured</div>
-
-  
+<div *ngIf="queueLength == 0">
+  <h2>It is your turn now</h2>
+</div>
+<div *ngIf="queueLength < 0">An error occured</div>

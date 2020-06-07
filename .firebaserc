@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "queueingsystem-f0b9f": {
+      "hosting": {
+        "QueueingSystem": [
+          "queueingsystem-f0b9f"
+        ]
+      }
+    }
+  }
+}

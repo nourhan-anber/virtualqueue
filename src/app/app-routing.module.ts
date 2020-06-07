@@ -8,7 +8,7 @@ import { AddQueueComponent } from './add-queue/add-queue.component';
 
 
 const routes: Routes = [
-  { path: '', redirectTo : 'welcome/0', pathMatch: 'full'},
+  { path: '', redirectTo : 'admin', pathMatch: 'full'},
   { path: 'welcome/:id', component: WelcomeComponent},
   { path: 'queue/:id/:queueId', component: QueueComponent},
   { path:'admin/:queueId', component: AdminComponent},

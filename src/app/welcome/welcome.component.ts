@@ -1,7 +1,8 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { FormGroup, FormControl, Validators} from '@angular/forms';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import firebaseService from '../service/firebase.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-welcome',
@@ -9,54 +10,59 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./welcome.component.css'],
 })
 
-export class WelcomeComponent implements OnInit , AfterViewInit {
+export class WelcomeComponent implements OnInit, OnDestroy {
 
   welcomeForm = new FormGroup({
-    username: new FormControl( '', Validators.required),
+    username: new FormControl('', Validators.required),
     phoneNumber: new FormControl('', Validators.required)
   });
-  constructor(public fire: firebaseService,  private route: ActivatedRoute, private router: Router) { }
+  constructor(public fire: firebaseService, private route: ActivatedRoute, private router: Router) { }
 
-   queueId : string;
-   locationTitle;
-   isLoading: boolean;
+  queueId: string;
+  locationTitle;
+  subLists: Subscription[] = [];
+
   ngOnInit(): void {
     this.queueId = this.route.snapshot.paramMap.get('id');
-    this.fire.queryCollection("location", ref => ref.where('id', '==', parseInt(this.queueId))).subscribe((res: any)=>{
+    //To get the location title
+    this.subLists.push(this.fire.queryCollection("location", ref => ref.where('id', '==', parseInt(this.queueId))).subscribe((res: any) => {
       this.locationTitle = res[0].payload.doc.data().name;
-    });
-    this.isLoading = true;
+    }));
   }
 
-  inqueue(){
-    if(this.welcomeForm.valid){   
-
-      const sub = this.fire.viewCollection('queue').subscribe((res: any )=>{
+  inqueue() {
+    if (this.welcomeForm.valid) {
+      const sub = this.fire.viewCollection('queue').subscribe((res: any) => {
+        //To stop the infinte loop
         sub.unsubscribe();
-        
+        //Build the customer object
         const customer = {
-          id: this.fire.getGreatestId(res)+1,
+          id: this.fire.getGreatestId(res) + 1,
           name: this.welcomeForm.value.username,
           phone: this.welcomeForm.value.phoneNumber,
           queueId: this.queueId,
           status: "InQueue"
-        }   
+        }
         this.fire.addCollection(customer, 'queue');
-        
-        this.router.navigate(['queue',customer.id, this.queueId]);
+
+        this.router.navigate(['queue', customer.id, this.queueId]);
       })
+      this.subLists.push(sub);
     }
-    else{
+    else {
       document.getElementById('alert').innerHTML = "Please try again with valid Name and Phone number";
     }
   }
+
   getErrorMessage(formField) {
     if (formField.hasError('required')) {
       return 'You must enter a valid value';
     }
   }
-  ngAfterViewInit() {
-    this.isLoading = false;
-}
 
+  ngOnDestroy() {
+    this.subLists.forEach(sub => {
+      !sub.closed && sub.unsubscribe();
+    })
+  }
 }

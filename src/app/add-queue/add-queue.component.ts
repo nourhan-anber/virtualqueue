@@ -1,56 +1,71 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import firebaseService from '../service/firebase.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-add-queue',
   templateUrl: './add-queue.component.html',
   styleUrls: ['./add-queue.component.css']
 })
-export class AddQueueComponent implements OnInit {
+export class AddQueueComponent implements OnInit, OnDestroy {
 
   addQueueForm = new FormGroup({
-    queueName : new FormControl('', Validators.required)
-  })
+    queueName : new FormControl('', Validators.required),
+    pinNumber : new FormControl('', Validators.required)
+  });
+  sublists: Subscription[] = [];
   constructor(private fire: firebaseService,private router: Router) { }
 
   ngOnInit(): void {
   }
 
-  addqueue(){
+  addQueue(){
     let latestId;
-
-    let previousQueue;
+    let previousQueue : [] = [];
 
     const sub = this.fire.viewCollection('location').subscribe((res: any)=>{
+      //To prevent infinte loop as a result of subscribtion
       sub.unsubscribe();
-      previousQueue = [];
-      res.forEach(element=>{
-        
-        previousQueue.push(element);
-      })
-      
+      //Get the whole queue to count the list length and incerement on it to set the ID
+      previousQueue = this.getPreviousQueue(res, previousQueue);
+      //Get the latest ID to incerement on it
       latestId = this.fire.getGreatestId(previousQueue);
-      console.log(latestId);
+      //Build the queue object to push it on the collection
       let queue = {
         id:latestId +1,
-        name: this.addQueueForm.value.queueName
+        name: this.addQueueForm.value.queueName,
+        pinNumber: this.addQueueForm.value.pinNumber
       };
      
       this.fire.addCollection(queue,'location').then(res=>{
-        alert("Congratulations you have your queue! please keep your ID in handy. ID = "+queue.id);
+        alert("Congratulations you have your queue! Here is the link please save it somewhere safe: virtualqueue.nourhananber.com/welcome/"+queue.id);
         this.router.navigate(['admin',queue.id]);
       }).catch(err=>{
         console.log("Please try again! " + err);
       });
     })
-
+    this.sublists.push(sub);
   }
+
+  getPreviousQueue(res , previousQueue){
+    res.forEach(element=>{
+      previousQueue.push(element);
+    })
+    return previousQueue;
+  }
+
   getErrorMessage(formField) {
     if (formField.hasError('required')) {
       return 'You must enter a valid value';
     }
+  }
+
+  ngOnDestroy(){
+    this.sublists.forEach(sub=>{
+      !sub.closed && sub.unsubscribe();
+    })
   }
   
 }
