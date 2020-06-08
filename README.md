@@ -23,7 +23,7 @@ Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.
 Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
 ## Demo
-Demo URL For Admins: https://virtualqueue.nourhananber.com/admin \n
+Demo URL For Admins: https://virtualqueue.nourhananber.com/admin <br />
 Demo URL For Customers: https://virtualqueue.nourhananber.com/welcome/30
 
 ## Further help
