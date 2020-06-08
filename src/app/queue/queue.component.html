@@ -1,6 +1,9 @@
 <div *ngIf="queueLength > 0">
   <h3>There're <strong>{{queueLength}}</strong> infront of you </h3>
-  <button mat-flat-button color="primary" (click)="dequeue()">Pull me out</button>
+  <p>
+    <button mat-flat-button color="primary" (click)="dequeue()">Pull me out</button>
+  </p>
+
 </div>
 <div *ngIf="queueLength == 0">
   <h2>It is your turn now</h2>

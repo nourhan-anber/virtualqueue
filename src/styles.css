@@ -1,4 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 
 html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body, h1,h2,h3,h4,h5,p,label, .mat-form-field{
+    font-family: 'Open Sans Light' !important;
+    color: #a8a8a8;
+}
+
+.mat-flat-button.mat-primary, .mat-raised-button.mat-primary, .mat-fab.mat-primary, .mat-mini-fab.mat-primary{
+    background-color: #8C52FF !important;
+}
+
+h1,h2,h3,h4,h5,p{
+    text-align: center !important;
+}

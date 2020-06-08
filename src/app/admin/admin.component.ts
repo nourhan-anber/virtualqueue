@@ -2,8 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import firebaseService from '../service/firebase.service';
 import { Subscription } from 'rxjs';
+import { CryptService } from '../service/crypt.service';
 
- 
+
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -20,12 +21,12 @@ export class AdminComponent implements OnInit, OnDestroy {
   branchTitle = "";
   ttemp = "";
   savedPinNumber;
-  constructor(private router: ActivatedRoute, private fire: firebaseService) {
+  constructor(private router: ActivatedRoute, private fire: firebaseService, private cryptService: CryptService) {
 
   }
 
   ngOnInit(): void {
-    this.queueId = this.router.snapshot.paramMap.get('queueId');
+    this.queueId = this.cryptService.decrypt(this.router.snapshot.paramMap.get('queueId'));
     const sub = this.fire.queryCollection('location', ref => ref.where("id", "==", parseInt(this.queueId))).subscribe((loc: any) => {
       this.branchTitle = loc[0].payload.doc.data().name;
       //Validate the PIN the user entered
@@ -77,10 +78,16 @@ export class AdminComponent implements OnInit, OnDestroy {
     })
   }
 
-  ngOnDestroy(){
-    this.subLists.forEach(sub=>{
+  ngOnDestroy() {
+    this.subLists.forEach(sub => {
       !sub.closed && sub.unsubscribe();
     })
+  }
+
+  getQueueUrl() {
+    const getUrl = window.location;
+    const baseUrl = getUrl.protocol + "//" + getUrl.host + "/";
+    return baseUrl + 'welcome/' + this.cryptService.encrypt(this.queueId);
   }
 
 }

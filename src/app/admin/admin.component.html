@@ -1,35 +1,43 @@
 <h1>{{branchTitle}}</h1>
 <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-    <!--- Note that these columns can be defined in any order.
+  <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
-  
-    <!-- Position Column -->
-    <ng-container matColumnDef="index">
-      <th mat-header-cell *matHeaderCellDef> No. </th>
-      <td mat-cell *matCellDef="let q"> {{q.data().id}} </td>
-    </ng-container>
-  
-    <!-- Name Column -->
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let q"> {{q.data().name}} </td>
-    </ng-container>
-  
-    <!-- Weight Column -->
-    <ng-container matColumnDef="phone">
-      <th mat-header-cell *matHeaderCellDef> Phone </th>
-      <td mat-cell *matCellDef="let q"> {{q.data().phone}} </td>
-    </ng-container>
-  
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="dismiss">
-      <th mat-header-cell *matHeaderCellDef> Dismiss </th>
-      <td mat-cell *matCellDef="let q"> <button mat-flat-button color="primary" (click)="dismiss(q, $event)">Dismiss</button> </td>
-    </ng-container>
-  
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
 
-  <h3 style="text-align: center;" *ngIf="dataSource.length == 0">No one in the queue yet !!!</h3>
+  <!-- Position Column -->
+  <ng-container matColumnDef="index">
+    <th mat-header-cell *matHeaderCellDef> No. </th>
+    <td mat-cell *matCellDef="let q"> {{q.data().id}} </td>
+  </ng-container>
+
+  <!-- Name Column -->
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let q"> {{q.data().name}} </td>
+  </ng-container>
+
+  <!-- Weight Column -->
+  <ng-container matColumnDef="phone">
+    <th mat-header-cell *matHeaderCellDef> Phone </th>
+    <td mat-cell *matCellDef="let q"> {{q.data().phone}} </td>
+  </ng-container>
+
+  <!-- Symbol Column -->
+  <ng-container matColumnDef="dismiss">
+    <th mat-header-cell *matHeaderCellDef> Dismiss </th>
+    <td mat-cell *matCellDef="let q"> <button mat-flat-button color="primary"
+        (click)="dismiss(q, $event)">Dismiss</button> </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<h3 style="margin-top:10px;text-align: center;" *ngIf="dataSource.length == 0">No one in the queue yet !!!</h3>
+
+<h3>Here is your QUeue Url and QR Code to Print</h3>
+<p>{{getQueueUrl()}}</p>
+<p>
+  <qrcode [qrdata]="getQueueUrl()" [width]="256" [errorCorrectionLevel]="'M'">
+  </qrcode>
+</p>

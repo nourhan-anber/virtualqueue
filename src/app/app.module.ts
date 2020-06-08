@@ -23,6 +23,8 @@ import { AdminComponent } from './admin/admin.component';
 import {MatCardModule} from '@angular/material/card';
 import { AddQueueComponent } from './add-queue/add-queue.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { QRCodeModule } from 'angularx-qrcode';
+import { CryptService } from './service/crypt.service';
 
 
 const config = {
@@ -57,9 +59,10 @@ const config = {
     MatCardModule,
     MatProgressSpinnerModule,
     FormsModule,
-    NgxMaskModule.forRoot()
+    NgxMaskModule.forRoot(),
+    QRCodeModule
   ],
-  providers: [AngularFirestore, firebaseService, AuthGuard],
+  providers: [AngularFirestore, firebaseService, AuthGuard, CryptService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import firebaseService from '../service/firebase.service';
 import { ActivatedRoute, Router} from '@angular/router';
 import { Subscription } from 'rxjs';
+import { CryptService } from '../service/crypt.service';
 
 @Component({
   selector: 'app-queue',
@@ -17,17 +18,18 @@ export class QueueComponent implements OnInit, OnDestroy {
   queueDocKey;
   
   subLists : Subscription[] = [];
-  constructor(private fireStoreService: firebaseService ,private route: ActivatedRoute, private router: Router) {   }
+  constructor(private fireStoreService: firebaseService ,private route: ActivatedRoute, private router: Router, private cryptService: CryptService) {   }
 
   ngOnInit(){
-    this.userId = Number(this.route.snapshot.paramMap.get('id'));
-    this.queueId= this.route.snapshot.paramMap.get('queueId');
+    this.userId = Number(this.cryptService.decrypt(this.route.snapshot.paramMap.get('id')));
+    this.queueId= this.cryptService.decrypt(this.route.snapshot.paramMap.get('queueId'));
     this.subLists.push(this.fireStoreService.queryCollection("queue", ref => ref.where('queueId', '==', this.queueId)).subscribe(res => {
       //Get all the IDs on the queue to get the index of the user
       let queueIds = this.getSortedIds(res);
       //Search for the user ID in all the IDs on the queue
       this.queueLength = queueIds.findIndex(index =>{return index >= this.userId;});
       //Checks if the ID exists and if it is not exists then the admin would dismissed the user 
+      console.log(this.queueLength);  
       if(this.queueLength < 0){
         alert("You are being dissmissed!");
         this.router.navigate(['welcome', this.queueId]);

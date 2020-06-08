@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import firebaseService from '../service/firebase.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { CryptService } from '../service/crypt.service';
 
 @Component({
   selector: 'app-welcome',
@@ -16,14 +17,14 @@ export class WelcomeComponent implements OnInit, OnDestroy {
     username: new FormControl('', Validators.required),
     phoneNumber: new FormControl('', Validators.required)
   });
-  constructor(public fire: firebaseService, private route: ActivatedRoute, private router: Router) { }
+  constructor(public fire: firebaseService, private route: ActivatedRoute, private router: Router, private cryptService:CryptService) { }
 
   queueId: string;
   locationTitle;
   subLists: Subscription[] = [];
 
   ngOnInit(): void {
-    this.queueId = this.route.snapshot.paramMap.get('id');
+    this.queueId = this.cryptService.decrypt(this.route.snapshot.paramMap.get('id'));
     //To get the location title
     this.subLists.push(this.fire.queryCollection("location", ref => ref.where('id', '==', parseInt(this.queueId))).subscribe((res: any) => {
       this.locationTitle = res[0].payload.doc.data().name;
@@ -45,7 +46,7 @@ export class WelcomeComponent implements OnInit, OnDestroy {
         }
         this.fire.addCollection(customer, 'queue');
 
-        this.router.navigate(['queue', customer.id, this.queueId]);
+        this.router.navigate(['queue', this.cryptService.encrypt(customer.id), this.cryptService.encrypt(this.queueId)]);
       })
       this.subLists.push(sub);
     }

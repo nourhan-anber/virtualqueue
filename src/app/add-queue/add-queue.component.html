@@ -1,19 +1,22 @@
-<h1>Queue Service</h1>
 <h3>How does it work?</h3>
 <p>Create your own queue easily with virtual queue, all what you need is to enter the queue name below, and give this link to your clients virtualqueue.nourhananber.com/welcome/'YOUR ID' and enjoy your admin panel with all the waiting customer's names and their phone numbers to further communications.</p>
 <form [formGroup]="addQueueForm" (submit)="addQueue()">
     <p>
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline">
             <mat-label>Enter Queue Name</mat-label>
             <input matInput type="text" placeholder="Queue Name" formControlName="queueName" name="queueName" required>
             <mat-error *ngIf="addQueueForm.controls.queueName.invalid">{{getErrorMessage(addQueueForm.controls.queueName)}}</mat-error>
         </mat-form-field>
-        <mat-form-field appearance="fill">
+    </p>
+    <p>
+        <mat-form-field appearance="outline">
             <mat-label>Choose 4-digits PIN number</mat-label>
             <input matInput type="text"  mask="0000" placeholder="5555" formControlName="pinNumber" name="pinNumber" required>
             <mat-error *ngIf="addQueueForm.controls.pinNumber.invalid">{{getErrorMessage(addQueueForm.controls.pinNumber)}}</mat-error>
         </mat-form-field>
     </p>
     <div id="alert" class="alert alert-danger"></div>
-    <button mat-flat-button color="primary" type="submit">Add my queue</button>
+    <p>
+        <button mat-flat-button color="primary" type="submit">Add my queue</button>
+    </p>
 </form>

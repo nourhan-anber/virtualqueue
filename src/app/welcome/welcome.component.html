@@ -1,7 +1,7 @@
 <h2>Welcome to {{locationTitle}} branch</h2>
 <form [formGroup]="welcomeForm" (submit)="inqueue()">
     <p>
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline">
             <mat-label>Enter your Name</mat-label>
             <input matInput type="text" placeholder="username" formControlName="username" name="username" required>
             <mat-error *ngIf="welcomeForm.controls.username.invalid">{{getErrorMessage(welcomeForm.controls.username)}}
@@ -9,13 +9,16 @@
         </mat-form-field>
     </p>
     <p>
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline">
             <mat-label>Phone number</mat-label>
             <input matInput type="text" mask="000-000-0000" placeholder="555-555-5555" formControlName="phoneNumber"
                 name="phoneNumber" required />
             <mat-icon matSuffix>phone</mat-icon>
         </mat-form-field>
     </p>
+
     <div id="alert" class="alert alert-danger"></div>
-    <button mat-flat-button color="primary" type="submit">Add me to queue</button>
+    <p>
+        <button mat-flat-button color="primary" type="submit">Add me to queue</button>
+    </p>
 </form>
